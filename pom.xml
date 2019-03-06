@@ -19,7 +19,7 @@
     <repositories>
         <repository>
             <id>ReadyMadeRepository</id>
-            <url>ftp://readymade.ivyro.net/public_html</url>
+            <url>http://readymade.ivyro.net/</url>
         </repository>
     </repositories>
 
