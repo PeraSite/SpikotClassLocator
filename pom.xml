@@ -5,16 +5,23 @@
 
     <groupId>io.github.ReadyMadeProgrammer</groupId>
     <artifactId>SpikotClassLocator</artifactId>
-    <version>2.2.2</version>
+    <version>3.0.0-b5</version>
     <packaging>jar</packaging>
 
     <name>io.github.ReadyMadeProgrammer SpikotClassLocator</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.2.60</kotlin.version>
+        <kotlin.version>1.3.21</kotlin.version>
         <junit.version>4.12</junit.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>ReadyMadeRepository</id>
+            <url>ftp://readymade.ivyro.net/public_html</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -37,7 +44,7 @@
         <dependency>
             <groupId>io.github.ReadyMadeProgrammer</groupId>
             <artifactId>Spikot</artifactId>
-            <version>2.5.14</version>
+            <version>3.0.0-b6</version>
         </dependency>
     </dependencies>
 
@@ -68,6 +75,19 @@
                 </executions>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>3.3.2</version>
+            </extension>
+        </extensions>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>ReadyMadeRepository</id>
+            <url>ftp://readymade.ivyro.net/public_html</url>
+        </repository>
+    </distributionManagement>
 </project>
