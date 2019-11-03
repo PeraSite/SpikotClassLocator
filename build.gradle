@@ -1,0 +1,83 @@
+buildscript {
+    ext{
+        kotlin_version = '1.3.50'
+        coroutine_version = '1.3.0-M2'
+        bukkit_version = '1.12.2-SNAPSHOT'
+        spikot_version = "3.2.0-SNAPSHOT"
+    }
+    repositories {
+        maven {
+            credentials {
+                username "$nexusUser"
+                password "$nexusPassword"
+            }
+            url 'http://nexus.readymaderepository.kro.kr/repository/maven-public/'
+        }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'maven-publish'
+
+group 'io.github.readymadeprogrammer'
+version '3.2.0-SNAPSHOT'
+
+repositories{
+    maven {
+        credentials {
+            username "$nexusUser"
+            password "$nexusPassword"
+        }
+        url 'http://nexus.readymaderepository.kro.kr/repository/maven-public/'
+    }
+}
+
+dependencies {
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'com.google.code.gson:gson:2.8.5'
+}
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += '-XXLanguage:+InlineClasses'
+        freeCompilerArgs += '-Xuse-experimental=kotlin.Experimental'
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'SpikotClassLocator'
+            artifact kotlinSourcesJar
+            from project.components.java
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username "$nexusUser"
+                password "$nexusPassword"
+            }
+
+            if (version.endsWith('SNAPSHOT')){
+                url 'http://maven.heartpattern.kr/repository/maven-snapshots/'
+            }
+            else{
+                url 'http://maven.heartpattern.kr/repository/maven-releases/'
+            }
+        }
+    }
+}
