@@ -59,7 +59,7 @@ class SpikotClassLocatorProcessor : AbstractProcessor() {
                         }
                     }
                 }
-                list.add(element.qualifiedName.toString())
+                list.add(processingEnv.elementUtils.getBinaryName(element).toString())
             }
         }
 
