@@ -3,7 +3,7 @@ pipeline{
 
     triggers{
         upstream(
-            upstreamProjects: 'Spikot',
+            upstreamProjects: 'Spikot/master',
             threshold: hudson.model.Result.SUCCESS
         )
     }
