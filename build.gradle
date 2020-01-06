@@ -25,10 +25,6 @@ version '4.0.0-SNAPSHOT'
 
 repositories{
     maven {
-        credentials {
-            username "$nexusUser"
-            password "$nexusPassword"
-        }
         url 'http://maven.heartpattern.kr/repository/maven-public/'
     }
 }
@@ -64,8 +60,8 @@ publishing {
     repositories {
         maven {
             credentials {
-                username "$nexusUser"
-                password "$nexusPassword"
+                username "${nexusUser}"
+                password "${nexusPassword}"
             }
 
             if (version.endsWith('SNAPSHOT')){

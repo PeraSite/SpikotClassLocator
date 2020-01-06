@@ -20,12 +20,12 @@ pipeline{
         }
         stage('compile'){
             steps{
-                sh './gradlew -PnexusUser=${MAVEN_CREDENTIAL_USR} -PnexusPassword=${MAVEN_CREDENTIAL_PSW} clean build'
+                sh './gradlew clean build'
             }
         }
         stage('test'){
             steps{
-                sh './gradlew -PnexusUser=${MAVEN_CREDENTIAL_USR} -PnexusPassword=${MAVEN_CREDENTIAL_PSW} test'
+                sh './gradlew test'
             }
         }
         stage('publish'){
