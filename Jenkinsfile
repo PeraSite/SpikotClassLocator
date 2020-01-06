@@ -15,17 +15,22 @@ pipeline{
     stages{
         stage('start daemon'){
             steps{
-                sh './gradlew --daemon'
+                sh './gradlew -PnexusUser=${MAVEN_CREDENTIAL_USR} -PnexusPassword=${MAVEN_CREDENTIAL_PSW} --daemon'
+            }
+        }
+        stage('clean'){
+            steps{
+                sh './gradlew -PnexusUser=${MAVEN_CREDENTIAL_USR} -PnexusPassword=${MAVEN_CREDENTIAL_PSW} clean'
             }
         }
         stage('compile'){
             steps{
-                sh './gradlew clean build'
+                sh './gradlew -PnexusUser=${MAVEN_CREDENTIAL_USR} -PnexusPassword=${MAVEN_CREDENTIAL_PSW} clean classes testClasses'
             }
         }
         stage('test'){
             steps{
-                sh './gradlew test'
+                sh './gradlew -PnexusUser=${MAVEN_CREDENTIAL_USR} -PnexusPassword=${MAVEN_CREDENTIAL_PSW} test'
             }
         }
         stage('publish'){
