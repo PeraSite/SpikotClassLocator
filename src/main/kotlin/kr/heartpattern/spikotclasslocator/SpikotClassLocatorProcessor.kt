@@ -10,7 +10,6 @@ import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.AnnotationValue
 import javax.lang.model.element.ElementKind
-import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
 import javax.tools.Diagnostic
 import javax.tools.StandardLocation
@@ -30,18 +29,21 @@ class SpikotClassLocatorProcessor : AbstractProcessor() {
         for (annotation in annotations) {
             val annotationMirrors = annotation.annotationMirrors
             val find = annotationMirrors.find { processingEnv.typeUtils.isSameType(it.annotationType, findAnnotationElement.asType()) }
-                    ?: continue
+                ?: continue
             val implements = find.elementValues.entries.find { it.key.simpleName.toString() == "impl" }?.value?.value as List<*>?
             val implementsTypeMirror = implements?.map {
                 processingEnv.typeUtils.erasure(
-                        getTypeElement((it as AnnotationValue).value.toString()).asType()
+                    getTypeElement((it as AnnotationValue).value.toString()).asType()
                 )
             }
             val list = map.getOrPut(annotation.qualifiedName.toString()) { LinkedList() }
             elem@ for (element in roundEnv.getElementsAnnotatedWith(annotation)) {
                 if (element.kind != ElementKind.CLASS || element !is TypeElement) {
-                    processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
-                            "@${annotation.qualifiedName} can only annotate class")
+                    processingEnv.messager.printMessage(
+                        Diagnostic.Kind.ERROR,
+                        "@${annotation.qualifiedName} can only annotate class",
+                        element
+                    )
                     return false
                 }
 
@@ -49,12 +51,15 @@ class SpikotClassLocatorProcessor : AbstractProcessor() {
                 if (implementsTypeMirror != null) {
                     for (implement in implementsTypeMirror) {
                         if (!processingEnv.typeUtils.isSubtype(
-                                        erasured,
-                                        implement
-                                )
+                                erasured,
+                                implement
+                            )
                         ) {
-                            processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
-                                    "@${annotation.qualifiedName} can only annotate class which implement ${implements.joinToString { it.toString() }}")
+                            processingEnv.messager.printMessage(
+                                Diagnostic.Kind.ERROR,
+                                "@${annotation.qualifiedName} can only annotate class which implement ${implements.joinToString { it.toString() }}",
+                                element
+                            )
                             return false
                         }
                     }
